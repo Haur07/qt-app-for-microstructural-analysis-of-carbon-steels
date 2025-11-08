@@ -6,7 +6,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui(new Ui::AboutDialog)
 {
     ui->setupUi(this);
-    ui->aboutOkPushButton->setIcon(QIcon(":/images/ok_icon.png"));
+    ui->aboutOkPushButton->setIcon(QIcon(":/images/img_files/ok_icon.png"));
     setFixedSize(425, 300);
 }
 

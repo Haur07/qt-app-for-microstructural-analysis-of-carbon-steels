@@ -122,7 +122,7 @@
       </property>
       <property name="icon">
        <iconset resource="Resources.qrc">
-        <normaloff>:/images/ok_icon.png</normaloff>:/images/ok_icon.png</iconset>
+        <normaloff>:/images/img_files/ok_icon.png</normaloff>:/images/img_files/ok_icon.png</iconset>
       </property>
      </widget>
     </item>

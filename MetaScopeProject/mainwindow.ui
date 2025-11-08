@@ -427,7 +427,7 @@
   <action name="actionAbout">
    <property name="icon">
     <iconset resource="Resources.qrc">
-     <normaloff>:/images/info_icon.png</normaloff>:/images/info_icon.png</iconset>
+     <normaloff>:/images/img_files/info_icon.png</normaloff>:/images/img_files/info_icon.png</iconset>
    </property>
    <property name="text">
     <string>About</string>

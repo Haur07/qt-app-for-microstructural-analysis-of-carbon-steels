@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->actionAbout->setIcon(QIcon(":/images/info_icon.png"));
+    ui->actionAbout->setIcon(QIcon(":/images/img_files/info_icon.png"));
     imgp_.setPreviewLabel(ui->leftImageLabel);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
     setFixedSize(944, 700);
