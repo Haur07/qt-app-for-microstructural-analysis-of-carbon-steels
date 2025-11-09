@@ -8,9 +8,13 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->actionAbout->setIcon(QIcon(":/images/img_files/info_icon.png"));
+    ui->selectImagePushButton->setIcon(QIcon(":/images/img_files/browse_file_icon.png"));
+    ui->processImagePushButton->setIcon(QIcon(":/images/img_files/gear_icon.png"));
+    ui->saveResultsPushButton->setIcon(QIcon(":/images/img_files/save_icon.png"));
+    ui->loadResultsPushButton->setIcon(QIcon(":/images/img_files/file_upload.png"));
     imgp_.setPreviewLabel(ui->leftImageLabel);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
-    setFixedSize(944, 700);
+    setFixedSize(944, 710);
 }
 
 MainWindow::~MainWindow()

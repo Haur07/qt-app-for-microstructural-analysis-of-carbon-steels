@@ -9,15 +9,11 @@
 #include <QDebug>
 
 ImageProcessing::ImageProcessing(QLabel *previewLabel)
-    : previewLabel_(previewLabel)
-{
-    setPreviewEmptyText();
-}
+    : previewLabel_(previewLabel) {}
 
 void ImageProcessing::setPreviewLabel(QLabel *label)
 {
     previewLabel_ = label;
-    setPreviewEmptyText();
 
     qDebug() << "!!! DEBUG LINE => previewLabel:" << previewLabel_;
 }
@@ -80,19 +76,10 @@ void ImageProcessing::fitToLabel()
         return;
 
     if (pix_.isNull()) {
-        setPreviewEmptyText();
         previewLabel_->setPixmap(QPixmap());
         return;
     }
 
     previewLabel_->setPixmap(pix_);
     previewLabel_->setText(QString());
-}
-
-void ImageProcessing::setPreviewEmptyText()
-{
-    if (previewLabel_) {
-        previewLabel_->setAlignment(Qt::AlignCenter);
-        previewLabel_->setText(QObject::tr("No image loaded"));
-    }
 }

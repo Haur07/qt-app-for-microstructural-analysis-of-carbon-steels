@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include <QIcon>
 #include <QPixmap>
+#include <QGraphicsOpacityEffect>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

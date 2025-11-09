@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>944</width>
-    <height>700</height>
+    <height>710</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>944</width>
-    <height>700</height>
+    <height>710</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>944</width>
-    <height>700</height>
+    <height>710</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -39,20 +39,75 @@
      <property name="topMargin">
       <number>0</number>
      </property>
-     <item alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="titleLabel">
-       <property name="font">
-        <font>
-         <family>Ubuntu Mono</family>
-         <pointsize>24</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Carbon Steel Microstructure Analyzer</string>
-       </property>
-      </widget>
+     <item>
+      <layout class="QHBoxLayout" name="iconTitleHorizontalLayout">
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item alignment="Qt::AlignRight">
+        <widget class="QLabel" name="titleIconLabel">
+         <property name="minimumSize">
+          <size>
+           <width>48</width>
+           <height>48</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>48</width>
+           <height>48</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="Resources.qrc">:/images/img_files/microscopy.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignHCenter">
+        <widget class="QLabel" name="titleLabel">
+         <property name="font">
+          <font>
+           <family>Ubuntu Mono</family>
+           <pointsize>24</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Carbon Steel Microstructure Analyzer</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </item>
      <item alignment="Qt::AlignHCenter">
       <widget class="QLabel" name="descriptionLabel">
@@ -79,12 +134,19 @@
           <font>
            <family>Ubuntu Mono</family>
            <pointsize>10</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="text">
           <string>Select Image</string>
+         </property>
+         <property name="icon">
+          <iconset resource="Resources.qrc">
+           <normaloff>:/images/img_files/browse_file_icon.png</normaloff>:/images/img_files/browse_file_icon.png</iconset>
          </property>
         </widget>
        </item>
@@ -94,10 +156,19 @@
           <font>
            <family>Ubuntu Mono</family>
            <pointsize>10</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="text">
           <string>Process Image</string>
+         </property>
+         <property name="icon">
+          <iconset resource="Resources.qrc">
+           <normaloff>:/images/img_files/gear_icon.png</normaloff>:/images/img_files/gear_icon.png</iconset>
          </property>
         </widget>
        </item>
@@ -157,7 +228,7 @@
             <active>
              <colorrole role="WindowText">
               <brush brushstyle="SolidPattern">
-               <color alpha="255">
+               <color alpha="128">
                 <red>156</red>
                 <green>156</green>
                 <blue>156</blue>
@@ -168,7 +239,7 @@
             <inactive>
              <colorrole role="WindowText">
               <brush brushstyle="SolidPattern">
-               <color alpha="255">
+               <color alpha="128">
                 <red>156</red>
                 <green>156</green>
                 <blue>156</blue>
@@ -192,17 +263,101 @@
           <property name="font">
            <font>
             <family>Ubuntu Mono</family>
-            <pointsize>12</pointsize>
+            <pointsize>15</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
            </font>
           </property>
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
           </property>
           <property name="text">
-           <string>Original Image</string>
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="Resources.qrc">:/images/img_files/image_placeholder.png</pixmap>
           </property>
           <property name="scaledContents">
            <bool>true</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+         <widget class="QLabel" name="leftImagePlaceholderLabel">
+          <property name="geometry">
+           <rect>
+            <x>130</x>
+            <y>60</y>
+            <width>200</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="palette">
+           <palette>
+            <active>
+             <colorrole role="WindowText">
+              <brush brushstyle="SolidPattern">
+               <color alpha="40">
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </active>
+            <inactive>
+             <colorrole role="WindowText">
+              <brush brushstyle="SolidPattern">
+               <color alpha="40">
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </inactive>
+            <disabled>
+             <colorrole role="WindowText">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>190</red>
+                <green>190</green>
+                <blue>190</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </disabled>
+           </palette>
+          </property>
+          <property name="font">
+           <font>
+            <family>Ubuntu Mono</family>
+            <pointsize>15</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Original Image</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -250,7 +405,7 @@
             <active>
              <colorrole role="WindowText">
               <brush brushstyle="SolidPattern">
-               <color alpha="255">
+               <color alpha="128">
                 <red>156</red>
                 <green>156</green>
                 <blue>156</blue>
@@ -261,7 +416,7 @@
             <inactive>
              <colorrole role="WindowText">
               <brush brushstyle="SolidPattern">
-               <color alpha="255">
+               <color alpha="128">
                 <red>156</red>
                 <green>156</green>
                 <blue>156</blue>
@@ -285,14 +440,101 @@
           <property name="font">
            <font>
             <family>Ubuntu Mono</family>
-            <pointsize>12</pointsize>
+            <pointsize>15</pointsize>
+            <weight>75</weight>
+            <italic>false</italic>
+            <bold>true</bold>
+            <underline>false</underline>
+            <strikeout>false</strikeout>
+           </font>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="Resources.qrc">:/images/img_files/image_placeholder.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+         <widget class="QLabel" name="rightMaskPlaceholderLabel">
+          <property name="geometry">
+           <rect>
+            <x>130</x>
+            <y>60</y>
+            <width>200</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="palette">
+           <palette>
+            <active>
+             <colorrole role="WindowText">
+              <brush brushstyle="SolidPattern">
+               <color alpha="40">
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </active>
+            <inactive>
+             <colorrole role="WindowText">
+              <brush brushstyle="SolidPattern">
+               <color alpha="40">
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </inactive>
+            <disabled>
+             <colorrole role="WindowText">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
+                <red>190</red>
+                <green>190</green>
+                <blue>190</blue>
+               </color>
+              </brush>
+             </colorrole>
+            </disabled>
+           </palette>
+          </property>
+          <property name="font">
+           <font>
+            <family>Ubuntu Mono</family>
+            <pointsize>15</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
            </font>
           </property>
           <property name="text">
            <string>Result Mask</string>
-          </property>
-          <property name="scaledContents">
-           <bool>true</bool>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -350,7 +592,7 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QHBoxLayout" name="lowerButtonsHorizontalLayout">
        <item>
         <widget class="QPushButton" name="saveResultsPushButton">
          <property name="enabled">
@@ -366,10 +608,19 @@
           <font>
            <family>Ubuntu Mono</family>
            <pointsize>10</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="text">
           <string>Save Results</string>
+         </property>
+         <property name="icon">
+          <iconset resource="Resources.qrc">
+           <normaloff>:/images/img_files/save_icon.png</normaloff>:/images/img_files/save_icon.png</iconset>
          </property>
         </widget>
        </item>
@@ -379,10 +630,19 @@
           <font>
            <family>Ubuntu Mono</family>
            <pointsize>10</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="text">
           <string>Load Results</string>
+         </property>
+         <property name="icon">
+          <iconset resource="Resources.qrc">
+           <normaloff>:/images/img_files/file_upload.png</normaloff>:/images/img_files/file_upload.png</iconset>
          </property>
         </widget>
        </item>
@@ -416,6 +676,17 @@
     <bool>false</bool>
    </property>
    <widget class="QMenu" name="menuAbout">
+    <property name="font">
+     <font>
+      <family>Ubuntu Mono</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="title">
      <string>Menu</string>
     </property>
@@ -435,6 +706,9 @@
    <property name="font">
     <font>
      <family>Ubuntu Mono</family>
+     <pointsize>11</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
     </font>
    </property>
   </action>
