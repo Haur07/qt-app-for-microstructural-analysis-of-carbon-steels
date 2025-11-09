@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>img_files/info_icon.png</file>
+        <file>img_files/ok_icon.png</file>
+        <file>img_files/microscopy.png</file>
+        <file>img_files/save_icon.png</file>
+        <file>img_files/browse_file_icon.png</file>
+        <file>img_files/file_upload.png</file>
+        <file>img_files/gear_icon.png</file>
+        <file>img_files/image_placeholder.png</file>
+    </qresource>
+</RCC>
