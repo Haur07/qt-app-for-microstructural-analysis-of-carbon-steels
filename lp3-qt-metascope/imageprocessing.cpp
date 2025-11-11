@@ -11,47 +11,27 @@
 ImageProcessing::ImageProcessing(QLabel *previewLabel)
     : previewLabel_(previewLabel) {}
 
-void ImageProcessing::setPreviewLabel(QLabel *label)
-{
-    previewLabel_ = label;
-
-    qDebug() << "!!! DEBUG LINE => previewLabel:" << previewLabel_;
-}
-
-QString ImageProcessing::imageFilter()
-{
-    return QObject::tr("Images (*.png *.jpg *.jpeg *.tif *.tiff)");
-}
+void ImageProcessing::setPreviewLabel(QLabel *label) { previewLabel_ = label; }
+QString ImageProcessing::imageFilter() { return QObject::tr("Images (*.png *.jpg *.jpeg *.tif *.tiff)"); }
 
 bool ImageProcessing::selectAndLoad(QWidget *parent)
 {
     const QString caption = QObject::tr("Select an image");
     const QString startDir = lastDir_.isEmpty() ? QDir::homePath() : lastDir_;
 
-    qDebug() << "!!! DEBUG LINE => startDir:" << startDir;
-
     const QString file = QFileDialog::getOpenFileName(parent, caption, startDir, imageFilter());
-
-    qDebug() << "!!! DEBUG LINE => file:" << file;
-
     if (file.isEmpty())
         return false;
-
     if (!loadFromFile(file))
         return false;
 
     lastDir_ = QFileInfo(file).absolutePath();
-
-    qDebug() << "!!! DEBUG LINE => lastDir_:" << lastDir_;
-
     fitToLabel();
     return true;
 }
 
 bool ImageProcessing::loadFromFile(const QString &path)
 {
-    qDebug() << "!!! DEBUG LINE => path:" << path;
-
     QImageReader reader(path);
     reader.setAutoTransform(true);
     const QImage image = reader.read();
@@ -59,9 +39,6 @@ bool ImageProcessing::loadFromFile(const QString &path)
         return false;
 
     pix_ = QPixmap::fromImage(image);
-
-    qDebug() << "pix_:" << pix_;
-
     if (!pix_.isNull())
         fitToLabel();
 
@@ -70,8 +47,6 @@ bool ImageProcessing::loadFromFile(const QString &path)
 
 void ImageProcessing::fitToLabel()
 {
-    qDebug() << "!!! DEBUG LINE => previewLabel_:" << previewLabel_;
-
     if (!previewLabel_)
         return;
 
@@ -79,7 +54,5 @@ void ImageProcessing::fitToLabel()
         previewLabel_->setPixmap(QPixmap());
         return;
     }
-
     previewLabel_->setPixmap(pix_);
-    previewLabel_->setText(QString());
 }

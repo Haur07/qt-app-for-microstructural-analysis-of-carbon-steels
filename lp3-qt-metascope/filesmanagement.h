@@ -15,8 +15,8 @@ public:
     FilesManagement(QWidget *parent);
 
     void createDir(QDir root);
-    void saveFile(const QPixmap &pix);
-    void loadFile(ImageProcessing &imgp);
+    void saveFile(const QPixmap &pix, const QPixmap &mask, double ferrite, double pearlite);
+    void loadFile(ImageProcessing &imgp, QPixmap &maskOut, double &ferriteOut, double &pearliteOut);
 
 private:
     QWidget *parent_ = nullptr;

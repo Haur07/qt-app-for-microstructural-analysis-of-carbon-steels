@@ -26,15 +26,13 @@ void FilesManagement::createDir(QDir root)
     }
     else
     {
-        qInfo() << "Something went wrong. Couldn`t create save directory.";
+        qInfo() << "Something went wrong. Couldn't create save directory.";
         return;
     }
 }
 
-void FilesManagement::saveFile(const QPixmap &pix)
+void FilesManagement::saveFile(const QPixmap &pix, const QPixmap &mask, double ferrite, double pearlite)
 {
-    qDebug() << "!!! DEBUG LINE => pix:" << pix;
-
     if (pix.isNull())
     {
         QMessageBox::warning(parent_, "Warning", "There is no image to save.");
@@ -43,10 +41,6 @@ void FilesManagement::saveFile(const QPixmap &pix)
 
     const QString basePath = QDir::current().filePath(dirPath_);
     QDir baseDir(basePath);
-
-    qDebug() << "!!! DEBUG LINE => basePath:" << basePath;
-    qDebug() << "!!! DEBUG LINE => baseDir:" << baseDir;
-
     if (!baseDir.exists() && !QDir().mkpath(basePath))
     {
         QMessageBox::critical(parent_, "Error", "Coudn't create base save directory.");
@@ -61,9 +55,6 @@ void FilesManagement::saveFile(const QPixmap &pix)
     }
 
     const QString targetPath = baseDir.filePath(dirName);
-
-    qDebug() << "!!! DEBUG LINE => targetPath:" << targetPath;
-
     if (QDir(targetPath).exists())
     {
         QMessageBox::StandardButton reply = QMessageBox::question(
@@ -76,33 +67,38 @@ void FilesManagement::saveFile(const QPixmap &pix)
 
     if (!QDir().mkpath(targetPath))
     {
-        QMessageBox::critical(parent_, "Error", "Coudln`t create the target directory.");
+        QMessageBox::critical(parent_, "Error", "Couldn't create the target directory.");
         return;
     }
 
+    const QPixmap resizedPix = pix.scaled(256, 256, Qt::IgnoreAspectRatio);
     const QString imagePath = QDir(targetPath).filePath("original_image.png");
-
-    qDebug() << "!!! DEBUG LINE => imagePath:" << imagePath;
-
-    if (!pix.save(imagePath, "PNG"))
+    if (!resizedPix.save(imagePath, "PNG"))
     {
-        QMessageBox::critical(parent_, "Error", "Couldn`t save the image file.");
+        QMessageBox::critical(parent_, "Error", "Couldn't save the image file.");
+        return;
+    }
+
+    const QString maskPath = QDir(targetPath).filePath("result_mask.png");
+    if (!mask.save(maskPath, "PNG"))
+    {
+        QMessageBox::warning(parent_, "Warning", "Couldn't save the mask file.");
         return;
     }
 
     QJsonObject json;
     json["image_path"] = imagePath;
+    json["mask_path"] = maskPath;
+    json["ferrite"] = QString::number(ferrite, 'f', 5);
+    json["pearlite"] = QString::number(pearlite, 'f', 5);
     json["save_time"] = QDateTime::currentDateTime().toString(Qt::ISODate);
 
     const QJsonDocument doc(json);
     const QString jsonPath = QDir(targetPath).filePath("results.json");
-
-    qDebug() << "!!! DEBUG LINE => jsonPath:" << jsonPath;
-
     QFile f(jsonPath);
     if(!f.open(QIODevice::WriteOnly | QIODevice::Truncate))
     {
-        QMessageBox::critical(parent_, "Error", "Couldn`t write the JSON file.");
+        QMessageBox::critical(parent_, "Error", "Couldn't write the JSON file.");
         return;
     }
 
@@ -112,13 +108,10 @@ void FilesManagement::saveFile(const QPixmap &pix)
     QMessageBox::information(parent_, "Saved", "The file was successfully saved.");
 }
 
-void FilesManagement::loadFile(ImageProcessing &imgp)
+void FilesManagement::loadFile(ImageProcessing &imgp, QPixmap &maskOut, double &ferriteOut, double &pearliteOut)
 {
     const QString basePath = QDir::current().filePath(dirPath_);
     QDir baseDir(basePath);
-
-    qDebug() << "!!! DEBUG LINE => basePath:" << basePath;
-    qDebug() << "!!! DEBUG LINE => baseDir:" << baseDir;
 
     if (!baseDir.exists())
     {
@@ -127,9 +120,6 @@ void FilesManagement::loadFile(ImageProcessing &imgp)
     }
 
     const QString jsonPath = QFileDialog::getOpenFileName(parent_, "Open results", basePath, "Results (results.json);;JSON (*.json)");
-
-    qDebug() << "!!! DEBUG LINE => jsonPath" << jsonPath;
-
     if (jsonPath.isEmpty()) { return; }
 
     QFile f(jsonPath);
@@ -144,12 +134,31 @@ void FilesManagement::loadFile(ImageProcessing &imgp)
 
     const QJsonDocument json = QJsonDocument::fromJson(data);
     const QJsonObject jsonObj = json.object();
+
     const QString imagePath = jsonObj.value("image_path").toString();
+    const QString maskPath = jsonObj.value("mask_path").toString();
     const QString saveTime = jsonObj.value("save_time").toString();
+
+    bool okF = false;
+    bool okP = false;
+    ferriteOut = jsonObj.value("ferrite").toString().toDouble(&okF);
+    pearliteOut = jsonObj.value("pearlite").toString().toDouble(&okP);
+
+    if (!okF || !okP)
+    {
+        QMessageBox::critical(parent_, "Error", "Invalid 'ferrite' or 'pearlite' values in JSON file.");
+        return;
+    }
 
     if (imagePath.isEmpty())
     {
         QMessageBox::critical(parent_, "Error", "Missing 'image_path' in JSON file.");
+        return;
+    }
+
+    if (maskPath.isEmpty())
+    {
+        QMessageBox::critical(parent_, "Error", "Missing 'mask_path' in JSON file.");
         return;
     }
 
@@ -159,16 +168,28 @@ void FilesManagement::loadFile(ImageProcessing &imgp)
         return;
     }
 
-    if (!imgp.loadFromFile(imagePath))
+    if (!QFileInfo::exists(maskPath))
     {
-        QMessageBox::critical(parent_, "Error", "Couldn't load from saved image.");
+        QMessageBox::critical(parent_, "Error", "Mask file not found.");
         return;
     }
 
+    if (!imgp.loadFromFile(imagePath))
+    {
+        QMessageBox::critical(parent_, "Error", "Couldn't load saved image.");
+        return;
+    }
+
+    QPixmap mask;
+    if(!mask.load(maskPath))
+    {
+        QMessageBox::critical(parent_, "Error", "Couldn't load saved mask.");
+        return;
+    }
+    maskOut = mask;
+
     const QString dirName = QFileInfo(jsonPath).dir().dirName();
-    const QString info = saveTime.isEmpty()
-            ? QString("Loaded results from '%1'.").arg(dirName)
-            : QString("Loaded results from '%1' (saved at %2).").arg(dirName, saveTime);
+    const QString info = QString("Loaded results from '%1' (saved at %2).").arg(dirName, saveTime);
 
     QMessageBox::information(parent_, "Loaded", info);
 }

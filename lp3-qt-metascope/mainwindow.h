@@ -3,6 +3,7 @@
 
 #include "imageprocessing.h"
 #include "filesmanagement.h"
+#include "apiconnection.h"
 
 #include <QMainWindow>
 #include <QIcon>
@@ -28,9 +29,16 @@ private slots:
     void on_loadResultsPushButton_clicked();
     void on_processImagePushButton_clicked();
 
+    void onPredictionReady(const QImage &mask, double ferrite, double pearlite);
+    void onNetworkError(const QString &message);
+
 private:
     Ui::MainWindow *ui;
     ImageProcessing imgp_;
     FilesManagement fm_;
+    APIConnection api_;
+
+    double ferrite_ = 0.0;
+    double pearlite_ = 0.0;
 };
 #endif // MAINWINDOW_H

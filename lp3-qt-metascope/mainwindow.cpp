@@ -22,6 +22,12 @@ MainWindow::MainWindow(QWidget *parent)
     setFixedSize(944, 710);
 
     imgp_.setPreviewLabel(ui->leftImageLabel);
+
+    connect(&api_, &APIConnection::predictionFinished, this, &MainWindow::onPredictionReady);
+    connect(&api_, &APIConnection::networkError, this, &MainWindow::onNetworkError);
+
+    api_.setEndpoint(QUrl(QStringLiteral("http://127.0.0.1:8080/predict")));
+    api_.setTimeoutMs(60000);
 }
 
 MainWindow::~MainWindow()
@@ -46,26 +52,71 @@ void MainWindow::on_selectImagePushButton_clicked()
         return;
     }
 
+    ui->leftImagePlaceholderLabel->setText(QString());
     ui->processImagePushButton->setEnabled(true);
-    ui->saveResultsPushButton->setEnabled(true);
 }
 
 void MainWindow::on_saveResultsPushButton_clicked()
 {
     fm_.createDir(QDir::current());
-    fm_.saveFile(imgp_.pixmap());
+    const QPixmap maskPix = ui->rightMaskLabel->pixmap(Qt::ReturnByValue);
+    fm_.saveFile(imgp_.pixmap(), maskPix, ferrite_, pearlite_);
 }
 
 
 void MainWindow::on_loadResultsPushButton_clicked()
 {
-    fm_.loadFile(imgp_);
+    QPixmap mask;
+    double ferrite;
+    double pearlite;
+
+    fm_.loadFile(imgp_, mask, ferrite, pearlite);
+    ui->leftImagePlaceholderLabel->setText(QString());
+
+    if (!mask.isNull())
+    {
+        ui->rightMaskLabel->setPixmap(mask);
+        ui->rightMaskPlaceholderLabel->setText(QString());
+    }
+
+    ui->phasesResultsLabel->setText(
+        QString("[ Ferrite: %1% ][ Pearlite: %2% ]")
+            .arg(ferrite, 0, 'f', 5)
+            .arg(pearlite, 0, 'f', 5)
+    );
 }
 
 
 void MainWindow::on_processImagePushButton_clicked()
 {
-    QMessageBox::warning(this, "Warning", "There's no functionality for this button yet.");
-    return;
+    setCursor(Qt::BusyCursor);
+    ui->saveResultsPushButton->setEnabled(false);
+    ui->processImagePushButton->setEnabled(false);
+    api_.predict(imgp_.pixmap());
 }
 
+void MainWindow::onPredictionReady(const QImage &mask, double ferrite, double pearlite)
+{
+    unsetCursor();
+    ui->processImagePushButton->setEnabled(true);
+
+    ferrite_ = ferrite;
+    pearlite_ = pearlite;
+
+    ui->rightMaskLabel->setPixmap(QPixmap::fromImage(mask));
+    ui->rightMaskPlaceholderLabel->setText(QString());
+    ui->leftImagePlaceholderLabel->setText(QString());
+    ui->phasesResultsLabel->setText(
+        QString("[ Ferrite: %1% ][ Pearlite: %2% ]")
+            .arg(ferrite, 0, 'f', 5)
+            .arg(pearlite, 0, 'f', 5)
+    );
+    ui->saveResultsPushButton->setEnabled(true);
+}
+
+void MainWindow::onNetworkError(const QString &msg)
+{
+    unsetCursor();
+    ui->processImagePushButton->setEnabled(true);
+    QMessageBox::critical(this, "Prediction error", msg);
+}
